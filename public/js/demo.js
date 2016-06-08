@@ -233,24 +233,25 @@ function fetch_ted_based_on_concepts() {
   }
 
   $('._demo--output').css('display', 'none');
-  $('._content--loading').show();
 
-  $.get('/api/conceptualSearch', {
+  if (concept_array && concept_array.length > 0) {
+    $('._content--loading').show();
+    $.get('/api/conceptualSearch', {
       ids: concept_array,
       limit: 3,
       document_fields: JSON.stringify({
         user_fields: 1
       })
     })
-    .done(function(results) {
+        .done(function(results) {
 
-      $('#TED-panel-API-data').empty();
-      $('#TED-panel-API-data').html(JSON.stringify(results, null, 2));
+          $('#TED-panel-API-data').empty();
+          $('#TED-panel-API-data').html(JSON.stringify(results, null, 2));
 
-      $('#TED-panel-list').empty();
-      for (var i = 0; i < results.results.length; i++)
-          generate_TED_panel(results.results[i], input_concept_labels);
-    }).fail(function(error) {
+          $('#TED-panel-list').empty();
+          for (var i = 0; i < results.results.length; i++)
+            generate_TED_panel(results.results[i], input_concept_labels);
+        }).fail(function(error) {
       error = error.responseJSON ? error.responseJSON.error : error.statusText;
       console.log('error:', error);
     }).always(function() {
@@ -262,7 +263,7 @@ function fetch_ted_based_on_concepts() {
       window.scrollTo(0, top);
 
     });
-
+  }
 }
 
 var typingTimer;
